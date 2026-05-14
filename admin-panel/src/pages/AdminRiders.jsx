@@ -21,10 +21,10 @@ export default function AdminRiders({ token }) {
 
   const loadZones = useCallback(async () => {
     try {
-      const data = await fetch('http://localhost:5000/api/merchants/zones').then(r=>r.json());
+      const data = await apiCall('/merchants/zones', token);
       if (data.zones?.length) setZones(data.zones);
     } catch {}
-  }, []);
+  }, [token]);
 
   useEffect(() => { load(); loadZones(); }, [load, loadZones]);
 

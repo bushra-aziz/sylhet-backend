@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Badge } from '../components/UI';
-import { timeAgo, apiCall } from '../utils';
+import { timeAgo, apiCall, API_BASE } from '../utils';
 
 function StatCard({ label, value, sub, accent, icon, loading }) {
   return (
@@ -88,7 +88,7 @@ export default function AdminDashboard({ token, onNavigate }) {
             <div style={{ fontSize: 11, color: 'rgba(255,255,255,.3)', fontFamily: 'DM Mono,monospace' }}>
               Run: <span style={{ color: '#93c5fd' }}>cd backend && npm start</span>
               &nbsp;&nbsp;→&nbsp;&nbsp;
-              Check: <span style={{ color: '#93c5fd' }}>http://localhost:5000/api/orders/dashboard/stats</span>
+              Check: <span style={{ color: '#93c5fd' }}>{API_BASE}/orders/dashboard/stats</span>
             </div>
           </div>
           <button onClick={loadAll} style={{
