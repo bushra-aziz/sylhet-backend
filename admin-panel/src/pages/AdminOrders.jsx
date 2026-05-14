@@ -3,7 +3,7 @@
 // Copy to: admin-panel/src/pages/AdminOrders.jsx
 // ============================================================
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Badge, useToast, Toast } from '../components/UI';
 import { timeAgo, apiCall } from '../utils';
 
@@ -17,10 +17,7 @@ export default function AdminOrders({ token }) {
   const [error, setError]             = useState('');
   const [toast, showToast]            = useToast();
 
-  useEffect(() => { loadOrders(); }, [statusFilter]);
-  useEffect(() => { loadRiders(); }, []);
-
-  async function loadOrders() {
+  const loadOrders = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -36,16 +33,19 @@ export default function AdminOrders({ token }) {
       setOrders([]);
     }
     setLoading(false);
-  }
+  }, [statusFilter, token]);
 
-  async function loadRiders() {
+  const loadRiders = useCallback(async () => {
     try {
       const data = await apiCall('/riders', token);
       if (data.success) setRiders(data.riders || []);
     } catch {
       setRiders([]);
     }
-  }
+  }, [token]);
+
+  useEffect(() => { loadOrders(); }, [loadOrders]);
+  useEffect(() => { loadRiders(); }, [loadRiders]);
 
   async function submitAssign() {
     if (!selectedRider) { showToast('Please select a rider', 'error'); return; }

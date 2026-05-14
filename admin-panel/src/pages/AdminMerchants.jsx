@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Badge, useToast, Toast } from '../components/UI';
 import { DEMO_MERCHANTS, apiCall } from '../utils';
 
@@ -8,14 +8,14 @@ export default function AdminMerchants({ token }) {
   const [form, setForm] = useState({ business_name:'', owner_name:'', phone:'', email:'', custom_delivery_rate:'', password:'', address:'' });
   const [toast, showToast] = useToast();
 
-  useEffect(() => { load(); }, []);
-
-  async function load() {
+  const load = useCallback(async () => {
     try {
       const data = await apiCall('/merchants', token);
       setMerchants(data.merchants || DEMO_MERCHANTS);
     } catch { setMerchants(DEMO_MERCHANTS); }
-  }
+  }, [token]);
+
+  useEffect(() => { load(); }, [load]);
 
   async function submitAdd() {
     if (!form.business_name || !form.phone) { showToast('Business name and phone required', 'error'); return; }

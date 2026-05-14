@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Badge, Modal, Field, Btn, useToast, Toast, CashBar } from '../components/UI';
+import { useState, useEffect, useCallback } from 'react';
+import { Badge, useToast, Toast, CashBar } from '../components/UI';
 import { DEMO_RIDERS, ZONES, apiCall } from '../utils';
 
 export default function AdminRiders({ token }) {
@@ -12,21 +12,21 @@ export default function AdminRiders({ token }) {
   const [depositAmount, setDepositAmount] = useState('');
   const [depositNotes, setDepositNotes] = useState('');
 
-  useEffect(() => { load(); loadZones(); }, []);
-
-  async function load() {
+  const load = useCallback(async () => {
     try {
       const data = await apiCall('/riders', token);
       setRiders(data.riders || DEMO_RIDERS);
     } catch { setRiders(DEMO_RIDERS); }
-  }
+  }, [token]);
 
-  async function loadZones() {
+  const loadZones = useCallback(async () => {
     try {
       const data = await fetch('http://localhost:5000/api/merchants/zones').then(r=>r.json());
       if (data.zones?.length) setZones(data.zones);
     } catch {}
-  }
+  }, []);
+
+  useEffect(() => { load(); loadZones(); }, [load, loadZones]);
 
   async function submitAdd() {
     if (!form.name || !form.phone) { showToast('Name and phone required', 'error'); return; }

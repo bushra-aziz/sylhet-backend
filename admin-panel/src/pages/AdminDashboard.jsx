@@ -3,7 +3,7 @@
 // Copy to: admin-panel/src/pages/AdminDashboard.jsx
 // ============================================================
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Badge } from '../components/UI';
 import { timeAgo, apiCall } from '../utils';
 
@@ -34,16 +34,7 @@ export default function AdminDashboard({ token, onNavigate }) {
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState('');
 
-  useEffect(() => { loadAll(); }, []);
-
-  async function loadAll() {
-    setLoading(true);
-    setError('');
-    await Promise.all([loadStats(), loadOrders()]);
-    setLoading(false);
-  }
-
-  async function loadStats() {
+  const loadStats = useCallback(async () => {
     try {
       const data = await apiCall('/orders/dashboard/stats', token);
       if (data.success) {
@@ -54,9 +45,9 @@ export default function AdminDashboard({ token, onNavigate }) {
     } catch (err) {
       setError('Cannot connect to backend. Make sure server is running on port 5000.');
     }
-  }
+  }, [token]);
 
-  async function loadOrders() {
+  const loadOrders = useCallback(async () => {
     try {
       const data = await apiCall('/orders?limit=10', token);
       if (data.success) {
@@ -67,7 +58,16 @@ export default function AdminDashboard({ token, onNavigate }) {
     } catch {
       setOrders([]);
     }
-  }
+  }, [token]);
+
+  const loadAll = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    await Promise.all([loadStats(), loadOrders()]);
+    setLoading(false);
+  }, [loadStats, loadOrders]);
+
+  useEffect(() => { loadAll(); }, [loadAll]);
 
   const cashAlert = stats && stats.total_cash_in_hand > 50000;
 

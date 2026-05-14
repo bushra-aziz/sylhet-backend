@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { CashBar, useToast, Toast } from '../components/UI';
+import { useState, useEffect, useCallback } from 'react';
+import { useToast, Toast } from '../components/UI';
 import { DEMO_RIDERS, ZONES, apiCall } from '../utils';
 
 export function AdminFinance({ token }) {
@@ -9,14 +9,14 @@ export function AdminFinance({ token }) {
   const [depositNotes, setDepositNotes] = useState('');
   const [toast, showToast] = useToast();
 
-  useEffect(() => { load(); }, []);
-
-  async function load() {
+  const load = useCallback(async () => {
     try {
       const data = await apiCall('/riders', token);
       setRiders(data.riders || DEMO_RIDERS);
     } catch { setRiders(DEMO_RIDERS); }
-  }
+  }, [token]);
+
+  useEffect(() => { load(); }, [load]);
 
   async function submitDeposit() {
     const amount = parseFloat(depositAmount);
