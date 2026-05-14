@@ -1,0 +1,37 @@
+name: rider_app
+description: Sylhet Courier - Rider Mobile App
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # HTTP requests
+  http: ^1.1.0
+
+  # Local storage (token save karne ke liye)
+  shared_preferences: ^2.2.2
+
+  # Google Maps navigation ke liye URL launch
+  url_launcher: ^6.2.1
+
+  # # Push notifications
+  # firebase_core: ^2.24.2
+  # firebase_messaging: ^14.7.10
+
+  # Better UI components
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
