@@ -132,14 +132,8 @@ export default function MerchantNewOrder({ token, onSuccess }) {
           'error'
         );
       }
-    } catch {
-      const fakeId =
-        'SYL' +
-        Date.now()
-          .toString()
-          .slice(-7);
-
-      setSavedResult(fakeId);
+    } catch (err) {
+      showToast('Connection error: Could not reach the server', 'error');
     }
 
     setLoading(false);

@@ -18,8 +18,8 @@ export default function MerchantLogin({ onLogin }) {
       const data = await res.json();
       if (data.success) { onLogin(data.token, data.user); return; }
       setErr(data.message || 'Login failed');
-    } catch {
-      onLogin('demo', { business_name:'Zindabazar Gifts', owner_name:'Nasrin Sultana', balance:12500, phone });
+    } catch (err) {
+      setErr('Connection error: Could not reach the server');
     }
     setLoading(false);
   }
