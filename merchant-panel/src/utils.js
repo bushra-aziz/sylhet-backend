@@ -37,18 +37,7 @@ export function fmtDate(dateStr) {
 }
 
 // ── Zones (Sylhet) ────────────────────────────
-export const ZONES = [
-  { id: '1', name: 'Zindabazar',    base_delivery_rate: 60  },
-  { id: '2', name: 'Amberkhana',    base_delivery_rate: 60  },
-  { id: '3', name: 'Upashahar',     base_delivery_rate: 70  },
-  { id: '4', name: 'Shibgonj',      base_delivery_rate: 65  },
-  { id: '5', name: 'Bondor',        base_delivery_rate: 75  },
-  { id: '6', name: 'Shahporan',     base_delivery_rate: 80  },
-  { id: '7', name: 'Mirer Moidan',  base_delivery_rate: 70  },
-  { id: '8', name: 'Akhalia',       base_delivery_rate: 85  },
-  { id: '9', name: 'Tilagor',       base_delivery_rate: 80  },
-  { id:'10', name: 'Kumarpara',     base_delivery_rate: 65  },
-];
+export const ZONES = [];
 
 // ── Demo Orders (fallback when API is offline) ─
 const now = new Date();
