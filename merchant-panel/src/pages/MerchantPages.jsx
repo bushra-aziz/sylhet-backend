@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { fmtDate, apiCall } from '../utils';
 
 function MBadge({ status }) {
@@ -60,11 +60,7 @@ export function MerchantOrders({ token }) {
   const [filter, setFilter] =
     useState('');
 
-  useEffect(() => {
-    loadOrders();
-  }, [filter]);
-
-  async function loadOrders() {
+  const loadOrders = useCallback(async () => {
     setLoading(true);
 
     try {
@@ -84,7 +80,11 @@ export function MerchantOrders({ token }) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [filter, token]);
+
+  useEffect(() => {
+    loadOrders();
+  }, [loadOrders]);
 
   const statuses = [
     '',
@@ -469,25 +469,14 @@ export function MerchantLedger({
   token,
   user,
 }) {
-  const [payouts, setPayouts] =
-    useState([]);
-
   const [orders, setOrders] =
     useState([]);
 
-  useEffect(() => {
-    load();
-  }, []);
-
-  async function load() {
+  const load = useCallback(async () => {
     try {
-      const ledger = await apiCall(
+      await apiCall(
         '/merchants/me/ledger',
         token
-      );
-
-      setPayouts(
-        ledger.payouts || []
       );
     } catch {}
 
@@ -499,7 +488,11 @@ export function MerchantLedger({
 
       setOrders(data.orders || []);
     } catch {}
-  }
+  }, [token]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const balance = Number(
     user?.balance || 0

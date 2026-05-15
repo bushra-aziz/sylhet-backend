@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ZONES, apiCall, parsePasteText, API_BASE } from '../utils';
 
 export default function MerchantNewOrder({ token, onSuccess }) {
@@ -20,11 +20,7 @@ export default function MerchantNewOrder({ token, onSuccess }) {
   const [toast, setToast] = useState(null);
   const [savedResult, setSavedResult] = useState(null);
 
-  useEffect(() => {
-    loadZones();
-  }, []);
-
-  async function loadZones() {
+  const loadZones = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE}/merchants/zones`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -35,7 +31,11 @@ export default function MerchantNewOrder({ token, onSuccess }) {
         setZones(data.zones);
       }
     } catch {}
-  }
+  }, [token]);
+
+  useEffect(() => {
+    loadZones();
+  }, [loadZones]);
 
   function showToast(msg, type) {
     setToast({ msg, type });

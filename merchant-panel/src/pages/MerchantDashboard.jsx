@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { timeAgo, apiCall } from '../utils';
 
 function MBadge({ status }) {
@@ -25,9 +25,7 @@ export default function MerchantDashboard({ token, user, onNavigate }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { load(); }, []);
-
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const data = await apiCall('/orders/merchant/my', token);
@@ -37,7 +35,9 @@ export default function MerchantDashboard({ token, user, onNavigate }) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [token]);
+
+  useEffect(() => { load(); }, [load]);
 
   const stats = {
     total:      orders.length,
